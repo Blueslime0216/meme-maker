@@ -1,12 +1,12 @@
 import React from 'react'
-import { ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from 'lucide-react'
+import { RotateCcw, RotateCw, ArrowUp, ArrowRight } from 'lucide-react'
 
 function RotateControls({ settings, onChange }) {
   const directions = [
-    { id: 'left', label: '←', icon: ArrowLeft },
-    { id: 'right', label: '→', icon: ArrowRight },
-    { id: 'up', label: '↑', icon: ArrowUp },
-    { id: 'down', label: '↓', icon: ArrowDown }
+    { id: 'left', label: '왼쪽', icon: RotateCcw, tooltip: 'Z축 반시계방향 회전' },
+    { id: 'right', label: '오른쪽', icon: RotateCw, tooltip: 'Z축 시계방향 회전' },
+    { id: 'up', label: '위로', icon: ArrowUp, tooltip: 'X축 위로 회전 (3D)' },
+    { id: 'down', label: '옆으로', icon: ArrowRight, tooltip: 'Y축 옆으로 회전 (3D)' }
   ]
 
   return (
@@ -16,20 +16,22 @@ function RotateControls({ settings, onChange }) {
         <label className="block text-sm font-semibold text-gray-300 mb-2">
           회전 방향
         </label>
-        <div className="grid grid-cols-4 gap-2">
-          {directions.map(({ id, label, icon: Icon }) => (
+        <div className="grid grid-cols-2 gap-2">
+          {directions.map(({ id, label, icon: Icon, tooltip }) => (
             <button
               key={id}
               onClick={() => onChange({ direction: id })}
+              title={tooltip}
               className={`
-                flex items-center justify-center p-3 rounded-lg transition-all duration-200
+                flex items-center justify-center gap-2 p-3 rounded-lg transition-all duration-200
                 ${settings.direction === id
                   ? 'bg-purple-600 text-white'
                   : 'bg-gray-700/50 hover:bg-gray-700 text-gray-300'
                 }
               `}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className="w-4 h-4" />
+              <span className="text-sm font-medium">{label}</span>
             </button>
           ))}
         </div>

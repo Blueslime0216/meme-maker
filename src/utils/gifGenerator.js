@@ -153,29 +153,53 @@ const renderRotateFrame = (ctx, img, width, height, frame, totalFrames, settings
 
   let angle = progress * Math.PI * 2
 
+  // 이미지 크기 조정
+  const baseScale = Math.min(width / img.width, height / img.height) * 0.8
+  const drawWidth = img.width * baseScale
+  const drawHeight = img.height * baseScale
+
   if (settings.direction === 'left') {
+    // 왼쪽으로 Z축 회전
     ctx.rotate(-angle)
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   } else if (settings.direction === 'right') {
+    // 오른쪽으로 Z축 회전
     ctx.rotate(angle)
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   } else if (settings.direction === 'up') {
-    const scale = Math.abs(Math.cos(angle))
-    ctx.scale(1, scale)
-    if (Math.sin(angle) < 0) {
+    // 위로 회전 (X축 기준 3D 회전 효과)
+    const rotationAngle = angle
+    
+    // 3D 회전을 시뮬레이션하기 위한 변환
+    const scaleY = Math.cos(rotationAngle)
+    
+    // 회전에 따른 스케일링
+    ctx.scale(1, Math.abs(scaleY))
+    
+    // 뒷면일 때 수평 뒤집기
+    if (scaleY < 0) {
       ctx.scale(1, -1)
     }
+    
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   } else if (settings.direction === 'down') {
-    const scale = Math.abs(Math.cos(angle))
-    ctx.scale(1, scale)
-    if (Math.sin(angle) > 0) {
-      ctx.scale(1, -1)
+    // 옆으로 회전 (Y축 기준 3D 회전 효과)
+    const rotationAngle = angle
+    
+    // 3D 회전을 시뮬레이션하기 위한 변환 (Y축 회전은 X축 스케일링)
+    const scaleX = Math.cos(rotationAngle)
+    
+    // 회전에 따른 스케일링
+    ctx.scale(Math.abs(scaleX), 1)
+    
+    // 뒷면일 때 수직 뒤집기
+    if (scaleX < 0) {
+      ctx.scale(-1, 1)
     }
+    
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   }
 
-  const scale = Math.min(width / img.width, height / img.height) * 0.8
-  const drawWidth = img.width * scale
-  const drawHeight = img.height * scale
-
-  ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   ctx.restore()
 }
 
