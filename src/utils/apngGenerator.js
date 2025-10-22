@@ -35,6 +35,18 @@ export const generateAPNG = async (image, effect, settings, onProgress) => {
           const bounceFrames = 8
           totalFrames = settings.emptyFrames + frameDuration + bounceFrames + waitFrames
           delay = Math.floor(1000 / fps)
+        } else if (effect === 'shake') {
+          const duration = 2 / settings.speed
+          totalFrames = Math.floor(fps * duration)
+          delay = Math.floor(1000 / fps)
+        } else if (effect === 'glow') {
+          const duration = 2 / settings.speed
+          totalFrames = Math.floor(fps * duration)
+          delay = Math.floor(1000 / fps)
+        } else if (effect === 'wave') {
+          const duration = 2 / settings.speed
+          totalFrames = Math.floor(fps * duration)
+          delay = Math.floor(1000 / fps)
         }
 
         const frames = []
@@ -48,6 +60,12 @@ export const generateAPNG = async (image, effect, settings, onProgress) => {
             renderRotateFrame(ctx, img, width, height, frame, totalFrames, settings)
           } else if (effect === 'stamp') {
             renderStampFrame(ctx, img, width, height, frame, settings)
+          } else if (effect === 'shake') {
+            renderShakeFrame(ctx, img, width, height, frame, totalFrames, settings)
+          } else if (effect === 'glow') {
+            renderGlowFrame(ctx, img, width, height, frame, totalFrames, settings)
+          } else if (effect === 'wave') {
+            renderWaveFrame(ctx, img, width, height, frame, totalFrames, settings)
           }
 
           // 프레임 데이터 추출
@@ -198,6 +216,132 @@ const renderStampFrame = (ctx, img, width, height, frame, settings) => {
     ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
   }
 
+  ctx.restore()
+}
+
+const renderShakeFrame = (ctx, img, width, height, frame, totalFrames, settings) => {
+  const progress = frame / totalFrames
+  const shakesPerSecond = settings.frequency / settings.speed
+  const fps = 30
+  const framesPerShake = fps / shakesPerSecond
+  const shakeProgress = (frame % framesPerShake) / framesPerShake
+  
+  const shakeOffset = Math.sin(shakeProgress * Math.PI * 2) * settings.intensity
+  
+  ctx.save()
+  
+  let offsetX = 0
+  let offsetY = 0
+  
+  if (settings.direction === 'horizontal') {
+    offsetX = shakeOffset
+  } else if (settings.direction === 'vertical') {
+    offsetY = shakeOffset
+  } else if (settings.direction === 'both') {
+    offsetX = Math.sin(shakeProgress * Math.PI * 2) * settings.intensity
+    offsetY = Math.cos(shakeProgress * Math.PI * 2) * settings.intensity
+  }
+  
+  ctx.translate(width / 2 + offsetX, height / 2 + offsetY)
+  
+  const scale = Math.min(width / img.width, height / img.height) * 0.8
+  const drawWidth = img.width * scale
+  const drawHeight = img.height * scale
+  
+  ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
+  ctx.restore()
+}
+
+const renderGlowFrame = (ctx, img, width, height, frame, totalFrames, settings) => {
+  const progress = frame / totalFrames
+  
+  ctx.save()
+  ctx.translate(width / 2, height / 2)
+  
+  const scale = Math.min(width / img.width, height / img.height) * 0.8
+  const drawWidth = img.width * scale
+  const drawHeight = img.height * scale
+  
+  if (settings.glowType === 'brightness') {
+    const brightness = 1 + (settings.intensity - 1) * (Math.sin(progress * Math.PI * 2) * 0.5 + 0.5)
+    ctx.filter = `brightness(${brightness})`
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
+  } else if (settings.glowType === 'rainbow') {
+    const hue = progress * 360
+    ctx.filter = `hue-rotate(${hue}deg) saturate(150%)`
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
+  } else if (settings.glowType === 'pulse') {
+    const opacity = settings.minOpacity + (settings.maxOpacity - settings.minOpacity) * (Math.sin(progress * Math.PI * 2) * 0.5 + 0.5)
+    ctx.globalAlpha = opacity
+    ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
+  }
+  
+  ctx.restore()
+}
+
+const renderWaveFrame = (ctx, img, width, height, frame, totalFrames, settings) => {
+  const progress = frame / totalFrames
+  const timeOffset = progress * Math.PI * 2
+  
+  const scale = Math.min(width / img.width, height / img.height) * 0.8
+  const drawWidth = img.width * scale
+  const drawHeight = img.height * scale
+  
+  const tempCanvas = document.createElement('canvas')
+  tempCanvas.width = drawWidth
+  tempCanvas.height = drawHeight
+  const tempCtx = tempCanvas.getContext('2d')
+  tempCtx.drawImage(img, 0, 0, drawWidth, drawHeight)
+  
+  ctx.save()
+  ctx.translate(width / 2, height / 2)
+  
+  if (settings.waveType === 'horizontal') {
+    const sliceHeight = 2
+    for (let y = 0; y < drawHeight; y += sliceHeight) {
+      const waveOffset = Math.sin((y / drawHeight) * Math.PI * settings.frequency + timeOffset) * settings.amplitude * settings.distortion
+      ctx.drawImage(
+        tempCanvas,
+        0, y, drawWidth, sliceHeight,
+        -drawWidth / 2 + waveOffset, -drawHeight / 2 + y, drawWidth, sliceHeight
+      )
+    }
+  } else if (settings.waveType === 'vertical') {
+    const sliceWidth = 2
+    for (let x = 0; x < drawWidth; x += sliceWidth) {
+      const waveOffset = Math.sin((x / drawWidth) * Math.PI * settings.frequency + timeOffset) * settings.amplitude * settings.distortion
+      ctx.drawImage(
+        tempCanvas,
+        x, 0, sliceWidth, drawHeight,
+        -drawWidth / 2 + x, -drawHeight / 2 + waveOffset, sliceWidth, drawHeight
+      )
+    }
+  } else if (settings.waveType === 'circular') {
+    const centerX = drawWidth / 2
+    const centerY = drawHeight / 2
+    const sliceSize = 2
+    
+    for (let y = 0; y < drawHeight; y += sliceSize) {
+      for (let x = 0; x < drawWidth; x += sliceSize) {
+        const dx = x - centerX
+        const dy = y - centerY
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY)
+        const waveOffset = Math.sin((distance / maxDistance) * Math.PI * settings.frequency + timeOffset) * settings.amplitude * settings.distortion
+        
+        const angle = Math.atan2(dy, dx)
+        const offsetX = Math.cos(angle) * waveOffset
+        const offsetY = Math.sin(angle) * waveOffset
+        
+        ctx.drawImage(
+          tempCanvas,
+          x, y, sliceSize, sliceSize,
+          -drawWidth / 2 + x + offsetX, -drawHeight / 2 + y + offsetY, sliceSize, sliceSize
+        )
+      }
+    }
+  }
+  
   ctx.restore()
 }
 

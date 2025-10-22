@@ -41,6 +41,30 @@ function App() {
         bounceScale: 1.15,
         duration: 400
       })
+    } else if (effect === 'shake') {
+      setEffectSettings({
+        direction: 'horizontal',
+        intensity: 10,
+        speed: 1,
+        frequency: 8
+      })
+    } else if (effect === 'glow') {
+      setEffectSettings({
+        glowType: 'brightness',
+        speed: 1,
+        intensity: 1.5,
+        glowColor: '#ffff00',
+        minOpacity: 0.3,
+        maxOpacity: 1
+      })
+    } else if (effect === 'wave') {
+      setEffectSettings({
+        waveType: 'horizontal',
+        amplitude: 10,
+        frequency: 3,
+        speed: 1,
+        distortion: 0.5
+      })
     }
     setPreviewKey(prev => prev + 1)
   }

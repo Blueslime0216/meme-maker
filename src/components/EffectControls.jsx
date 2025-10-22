@@ -1,6 +1,9 @@
 import React from 'react'
 import RotateControls from './controls/RotateControls'
 import StampControls from './controls/StampControls'
+import ShakeControls from './controls/ShakeControls'
+import GlowControls from './controls/GlowControls'
+import WaveControls from './controls/WaveControls'
 
 function EffectControls({ effect, settings, onSettingsChange }) {
   return (
@@ -13,6 +16,18 @@ function EffectControls({ effect, settings, onSettingsChange }) {
 
         {effect === 'stamp' && (
           <StampControls settings={settings} onChange={onSettingsChange} />
+        )}
+
+        {effect === 'shake' && (
+          <ShakeControls settings={settings} onChange={onSettingsChange} />
+        )}
+
+        {effect === 'glow' && (
+          <GlowControls settings={settings} onChange={onSettingsChange} />
+        )}
+
+        {effect === 'wave' && (
+          <WaveControls settings={settings} onChange={onSettingsChange} />
         )}
       </div>
     </div>
