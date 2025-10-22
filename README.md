@@ -1,20 +1,122 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🎨 이미지 애니메이터
 
-# Run and deploy your AI Studio app
+이미지를 업로드하고 다양한 애니메이션 효과를 적용하여 GIF/APNG로 다운로드할 수 있는 웹 애플리케이션입니다.
 
-This contains everything you need to run your app locally.
+## ✨ 주요 기능
 
-View your app in AI Studio: https://ai.studio/apps/drive/1TbY3E2W6P7Geh1R7U2WxyIf9G4Y-eiF4
+### 🔄 회전 효과
+- **4방향 회전**: 왼쪽, 오른쪽, 위, 아래로 360도 회전
+- **속도 조절**: 0.25x ~ 3x까지 자유롭게 조절
+- **배경 설정**: 투명 배경 또는 원하는 색상의 단색 배경
+- **실시간 프리뷰**: 설정 변경 시 즉시 확인
 
-## Run Locally
+### 🎯 도장 효과
+- **동적인 등장**: 큰 크기로 등장하여 정상 크기로 찍힘
+- **기울기 조절**: -45° ~ 45°까지 자유로운 각도 설정
+- **튕김 효과**: 도장이 찍힐 때 자연스러운 튕김 애니메이션
+- **세밀한 커스터마이징**:
+  - 시작 전 빈 프레임 수
+  - 찍힌 후 대기 시간
+  - 등장 시 크기 배율
+  - 튕김 강도
+  - 찍히는 속도
 
-**Prerequisites:**  Node.js
+### 📦 내보내기
+- **GIF 형식**: 256색, 작은 파일 크기, 범용 호환성
+- **APNG 형식**: 트루컬러, 고품질, 투명도 완벽 지원
+- **최적화**: 압축 알고리즘으로 파일 크기 최소화
+- **진행 상황 표시**: 실시간 생성 진행률 확인
 
+## 🚀 시작하기
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 설치
+
+```bash
+# 의존성 설치
+npm install
+```
+
+### 개발 서버 실행
+
+```bash
+npm run dev
+```
+
+브라우저에서 `http://localhost:3000`을 열어주세요.
+
+### 빌드
+
+```bash
+npm run build
+```
+
+### 프리뷰
+
+```bash
+npm run preview
+```
+
+## 🛠️ 기술 스택
+
+- **React 18** - UI 라이브러리
+- **Vite** - 빠른 개발 환경
+- **Tailwind CSS** - 유틸리티 기반 CSS 프레임워크
+- **gif.js** - GIF 생성 라이브러리
+- **upng-js** - APNG 생성 라이브러리
+- **Lucide React** - 아이콘 라이브러리
+
+## 📁 프로젝트 구조
+
+```
+src/
+├── components/
+│   ├── Header.jsx              # 헤더 컴포넌트
+│   ├── ImageUploader.jsx       # 이미지 업로드 컴포넌트
+│   ├── EffectSelector.jsx      # 효과 선택 컴포넌트
+│   ├── EffectControls.jsx      # 효과 설정 컴포넌트
+│   ├── Preview.jsx             # 실시간 프리뷰 컴포넌트
+│   ├── ExportPanel.jsx         # 내보내기 패널 컴포넌트
+│   └── controls/
+│       ├── RotateControls.jsx  # 회전 효과 설정
+│       └── StampControls.jsx   # 도장 효과 설정
+├── utils/
+│   ├── gifGenerator.js         # GIF 생성 유틸리티
+│   └── apngGenerator.js        # APNG 생성 유틸리티
+├── App.jsx                     # 메인 앱 컴포넌트
+├── main.jsx                    # 엔트리 포인트
+└── index.css                   # 글로벌 스타일
+```
+
+## 🎯 사용 방법
+
+1. **이미지 업로드**: 클릭하거나 드래그하여 이미지 업로드
+2. **효과 선택**: 회전 또는 도장 효과 선택
+3. **설정 조정**: 원하는 대로 효과 파라미터 조정
+4. **프리뷰 확인**: 실시간으로 결과 확인
+5. **다운로드**: GIF 또는 APNG 형식으로 다운로드
+
+## 🎨 UI/UX 특징
+
+- **그라데이션 배경**: 눈에 띄는 보라색 그라데이션
+- **글래스모피즘**: 반투명 유리 효과의 모던한 카드
+- **반응형 레이아웃**: 모바일부터 데스크톱까지 완벽 지원
+- **부드러운 애니메이션**: 모든 인터랙션에 자연스러운 전환 효과
+- **직관적인 컨트롤**: 슬라이더와 버튼으로 쉬운 조작
+- **시각적 피드백**: 선택 상태와 진행 상황을 명확하게 표시
+
+## 🔮 향후 계획
+
+- 더 많은 애니메이션 효과 추가
+- 텍스트 오버레이 기능
+- 다중 이미지 지원
+- 배치 처리 기능
+- 프리셋 저장 및 불러오기
+
+## 📝 라이선스
+
+MIT License
+
+---
+
+Made with ❤️ for creative animations
+

@@ -1,5 +1,0 @@
-{
-  "name": "Image Animator Pro",
-  "description": "An advanced web application that allows users to upload an image, apply various customizable animation effects like rotation and stamping, preview them in real-time, and export the final creation as a high-quality, optimized GIF or APNG file.",
-  "requestFramePermissions": []
-}
