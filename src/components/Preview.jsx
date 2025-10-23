@@ -71,6 +71,16 @@ function Preview({ image, effect, settings }) {
     }
   }, [img, effect, settings, isPlaying])
 
+  // 출력 영역 표시 함수
+  const drawOutputBounds = (ctx, width, height) => {
+    ctx.save()
+    ctx.strokeStyle = '#ff0000'
+    ctx.lineWidth = 2
+    ctx.setLineDash([5, 5])
+    ctx.strokeRect(0, 0, width, height)
+    ctx.restore()
+  }
+
   const animateRotate = (ctx, img, width, height, frameCount, settings) => {
     const fps = 30
     const rotationDuration = 2 / settings.speed // 초 단위
@@ -203,6 +213,9 @@ function Preview({ image, effect, settings }) {
     }
 
     ctx.restore()
+    
+    // 출력 영역 표시
+    drawOutputBounds(ctx, width, height)
   }
 
   const animateShake = (ctx, img, width, height, frameCount, settings) => {
@@ -238,6 +251,9 @@ function Preview({ image, effect, settings }) {
     
     ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight)
     ctx.restore()
+    
+    // 출력 영역 표시
+    drawOutputBounds(ctx, width, height)
   }
 
   const animateGlow = (ctx, img, width, height, frameCount, settings) => {
@@ -280,6 +296,9 @@ function Preview({ image, effect, settings }) {
     }
     
     ctx.restore()
+    
+    // 출력 영역 표시
+    drawOutputBounds(ctx, width, height)
   }
 
   const animateWave = (ctx, img, width, height, frameCount, settings) => {
@@ -354,6 +373,9 @@ function Preview({ image, effect, settings }) {
     }
     
     ctx.restore()
+    
+    // 출력 영역 표시
+    drawOutputBounds(ctx, width, height)
   }
 
   const togglePlayPause = () => {
